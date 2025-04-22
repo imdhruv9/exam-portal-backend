@@ -12,4 +12,5 @@ public class OnlineTestPortalApplication {
 		SpringApplication.run(OnlineTestPortalApplication.class, args);
 	}
 
+
 }
