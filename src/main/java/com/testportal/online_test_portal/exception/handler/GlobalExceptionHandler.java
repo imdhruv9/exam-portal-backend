@@ -1,8 +1,12 @@
 package com.testportal.online_test_portal.exception.handler;
 
 
+import com.testportal.online_test_portal.exception.custom.DuplicateEntryException;
+import com.testportal.online_test_portal.exception.custom.InvalidCredentialException;
+import com.testportal.online_test_portal.exception.custom.UserNotFoundException;
 import com.testportal.online_test_portal.exception.model.ErrorResponse;
 import jakarta.servlet.http.HttpServletRequest;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -29,11 +33,54 @@ public class GlobalExceptionHandler {
                 .timestamp(LocalDateTime.now())
                 .status(HttpStatus.BAD_REQUEST.value())
                 .error(errorMessages)
-                .message("please enter valid request body")
+                .message("Please enter valid input")
                 .path(request.getRequestURI())
                 .build();
         return new ResponseEntity<>(errorResponse,HttpStatus.BAD_REQUEST);
 
-
+    }
+    @ExceptionHandler(UserNotFoundException.class)
+    public ResponseEntity<ErrorResponse> handleUserNotFoundException(UserNotFoundException ex ,HttpServletRequest request){
+        ErrorResponse errorResponse = ErrorResponse.builder()
+                .timestamp(LocalDateTime.now())
+                .status(HttpStatus.NOT_FOUND.value())
+                .error(ex.getMessage())
+                .message("Please enter valid user")
+                .path(request.getRequestURI())
+                .build();
+        return new ResponseEntity<>(errorResponse,HttpStatus.NOT_FOUND);
+    }
+    @ExceptionHandler(InvalidCredentialException.class)
+    public ResponseEntity<ErrorResponse> handleInvalidCredentialException(InvalidCredentialException ex , HttpServletRequest request){
+        ErrorResponse errorResponse = ErrorResponse.builder()
+                .timestamp(LocalDateTime.now())
+                .status(HttpStatus.UNAUTHORIZED.value())
+                .error(ex.getMessage())
+                .message("Invalid Password")
+                .path(request.getRequestURI())
+                .build();
+        return new ResponseEntity<>(errorResponse,HttpStatus.UNAUTHORIZED);
+    }
+    @ExceptionHandler(DuplicateEntryException.class)
+    public ResponseEntity<ErrorResponse> handleInvalidCredentialException(DuplicateEntryException ex , HttpServletRequest request){
+        ErrorResponse errorResponse = ErrorResponse.builder()
+                .timestamp(LocalDateTime.now())
+                .status(HttpStatus.CONFLICT.value())
+                .error(ex.getMessage())
+                .message("User already exist")
+                .path(request.getRequestURI())
+                .build();
+        return new ResponseEntity<>(errorResponse,HttpStatus.CONFLICT);
+    }
+    @ExceptionHandler(DataIntegrityViolationException.class)
+    public ResponseEntity<ErrorResponse> handleInvalidCredentialException(DataIntegrityViolationException ex , HttpServletRequest request){
+        ErrorResponse errorResponse = ErrorResponse.builder()
+                .timestamp(LocalDateTime.now())
+                .status(HttpStatus.CONFLICT.value())
+                .error(ex.getMessage())
+                .message("Resource already exist")
+                .path(request.getRequestURI())
+                .build();
+        return new ResponseEntity<>(errorResponse,HttpStatus.CONFLICT);
     }
 }
