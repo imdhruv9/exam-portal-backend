@@ -29,7 +29,7 @@ public class AuthController {
         return  new ResponseEntity<>(userResponseDto, HttpStatus.CREATED);
     }
     @PostMapping("/register/user")
-    public ResponseEntity<UserResponseDto> registerUserController(@Valid @RequestBody UserRequestDto userRequestDto){
+    public ResponseEntity<UserResponseDto> registerUser(@Valid @RequestBody UserRequestDto userRequestDto){
         UserResponseDto savedUser = userService.registerUser(userRequestDto);
         return new ResponseEntity<>(savedUser, HttpStatus.CREATED);
     }

@@ -21,7 +21,7 @@ public class GlobalExceptionHandler {
 
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
-    public ResponseEntity<ErrorResponse> handleValidationException(MethodArgumentNotValidException ex, HttpServletRequest request) {
+    public ResponseEntity<ErrorResponse> ValidationException(MethodArgumentNotValidException ex, HttpServletRequest request) {
         String errorMessages = ex.getBindingResult().getFieldErrors()
                 .stream()
                 .map(error -> error.getField() + ": " + error.getDefaultMessage())
@@ -40,7 +40,7 @@ public class GlobalExceptionHandler {
 
     }
     @ExceptionHandler(UserNotFoundException.class)
-    public ResponseEntity<ErrorResponse> handleUserNotFoundException(UserNotFoundException ex ,HttpServletRequest request){
+    public ResponseEntity<ErrorResponse> UserNotFoundException(UserNotFoundException ex ,HttpServletRequest request){
         ErrorResponse errorResponse = ErrorResponse.builder()
                 .timestamp(LocalDateTime.now())
                 .status(HttpStatus.NOT_FOUND.value())
@@ -51,7 +51,7 @@ public class GlobalExceptionHandler {
         return new ResponseEntity<>(errorResponse,HttpStatus.NOT_FOUND);
     }
     @ExceptionHandler(InvalidCredentialException.class)
-    public ResponseEntity<ErrorResponse> handleInvalidCredentialException(InvalidCredentialException ex , HttpServletRequest request){
+    public ResponseEntity<ErrorResponse> InvalidCredentialException(InvalidCredentialException ex , HttpServletRequest request){
         ErrorResponse errorResponse = ErrorResponse.builder()
                 .timestamp(LocalDateTime.now())
                 .status(HttpStatus.UNAUTHORIZED.value())
@@ -62,7 +62,7 @@ public class GlobalExceptionHandler {
         return new ResponseEntity<>(errorResponse,HttpStatus.UNAUTHORIZED);
     }
     @ExceptionHandler(DuplicateEntryException.class)
-    public ResponseEntity<ErrorResponse> handleInvalidCredentialException(DuplicateEntryException ex , HttpServletRequest request){
+    public ResponseEntity<ErrorResponse> DuplicateEntryException(DuplicateEntryException ex , HttpServletRequest request){
         ErrorResponse errorResponse = ErrorResponse.builder()
                 .timestamp(LocalDateTime.now())
                 .status(HttpStatus.CONFLICT.value())
@@ -73,7 +73,7 @@ public class GlobalExceptionHandler {
         return new ResponseEntity<>(errorResponse,HttpStatus.CONFLICT);
     }
     @ExceptionHandler(DataIntegrityViolationException.class)
-    public ResponseEntity<ErrorResponse> handleInvalidCredentialException(DataIntegrityViolationException ex , HttpServletRequest request){
+    public ResponseEntity<ErrorResponse> DataIntegrityViolation(DataIntegrityViolationException ex , HttpServletRequest request){
         ErrorResponse errorResponse = ErrorResponse.builder()
                 .timestamp(LocalDateTime.now())
                 .status(HttpStatus.CONFLICT.value())
