@@ -3,7 +3,6 @@ package com.testportal.online_test_portal.controller;
 import com.testportal.online_test_portal.dto.PasswordUpdateDto;
 import com.testportal.online_test_portal.dto.UserProfileDto;
 import com.testportal.online_test_portal.dto.UserUpdateDto;
-import com.testportal.online_test_portal.repository.UserRepository;
 import com.testportal.online_test_portal.service.UserService;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Min;
@@ -25,12 +24,12 @@ public class UserController {
         UserProfileDto user = userService.getUserById(id);
         return new ResponseEntity<>(user, HttpStatus.OK);
     }
-    @PostMapping("/update")
+    @PatchMapping
     public ResponseEntity<UserProfileDto> updateUserProfile(@RequestBody @Valid UserUpdateDto userUpdateDto){
         UserProfileDto user = userService.updateUserProfile(userUpdateDto);
         return new ResponseEntity<>(user,HttpStatus.OK);
     }
-    @DeleteMapping("/delete/{id}")
+    @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteUserById(@PathVariable @Min(1) Long id){
         userService.deleteUserById(id);
         return  new ResponseEntity<>(HttpStatus.NO_CONTENT);
