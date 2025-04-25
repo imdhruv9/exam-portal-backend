@@ -24,7 +24,7 @@ public class UserController {
         UserProfileDto user = userService.getUserById(id);
         return new ResponseEntity<>(user, HttpStatus.OK);
     }
-    @PatchMapping
+    @PutMapping
     public ResponseEntity<UserProfileDto> updateUserProfile(@RequestBody @Valid UserUpdateDto userUpdateDto){
         UserProfileDto user = userService.updateUserProfile(userUpdateDto);
         return new ResponseEntity<>(user,HttpStatus.OK);
@@ -34,7 +34,7 @@ public class UserController {
         userService.deleteUserById(id);
         return  new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
-    @PostMapping("password-update")
+    @PatchMapping("/password")
     public ResponseEntity<Void> updatePassword(@RequestBody @Valid PasswordUpdateDto passwordUpdateDto){
         userService.updatePassword(passwordUpdateDto);
        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
