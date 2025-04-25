@@ -13,22 +13,18 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class UserRegisterDto {
-    @NotBlank
+@JsonInclude(JsonInclude.Include.NON_NULL)
+public class UserUpdateDto {
     private String firstName;
 
-    @NotBlank
     private String lastName;
 
-    @NotBlank
     private String username;
 
-    @NotBlank
     @Email(message = "Invalid email format")
     private String email;
 
-    @NotBlank
-    private String password;
-
+    @NotNull
+    private Long id;
 
 }
