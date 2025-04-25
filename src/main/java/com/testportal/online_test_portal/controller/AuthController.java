@@ -1,7 +1,7 @@
 package com.testportal.online_test_portal.controller;
 
 import com.testportal.online_test_portal.dto.LoginRequestDto;
-import com.testportal.online_test_portal.dto.UserRequestDto;
+import com.testportal.online_test_portal.dto.UserRegisterDto;
 import com.testportal.online_test_portal.dto.UserResponseDto;
 import com.testportal.online_test_portal.service.UserService;
 import jakarta.validation.Valid;
@@ -24,12 +24,12 @@ public class AuthController {
     }
 
     @PostMapping("/register/admin")
-    public ResponseEntity<UserResponseDto> registerAdmin(@Valid @RequestBody UserRequestDto userRequestDto){
+    public ResponseEntity<UserResponseDto> registerAdmin(@Valid @RequestBody UserRegisterDto userRequestDto){
         UserResponseDto userResponseDto = userService.registerAdmin(userRequestDto);
         return  new ResponseEntity<>(userResponseDto, HttpStatus.CREATED);
     }
     @PostMapping("/register/user")
-    public ResponseEntity<UserResponseDto> registerUser(@Valid @RequestBody UserRequestDto userRequestDto){
+    public ResponseEntity<UserResponseDto> registerUser(@Valid @RequestBody UserRegisterDto userRequestDto){
         UserResponseDto savedUser = userService.registerUser(userRequestDto);
         return new ResponseEntity<>(savedUser, HttpStatus.CREATED);
     }

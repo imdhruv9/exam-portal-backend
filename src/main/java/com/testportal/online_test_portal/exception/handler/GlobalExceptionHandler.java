@@ -6,12 +6,15 @@ import com.testportal.online_test_portal.exception.custom.InvalidCredentialExcep
 import com.testportal.online_test_portal.exception.custom.UserNotFoundException;
 import com.testportal.online_test_portal.exception.model.ErrorResponse;
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.validation.ConstraintViolationException;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.method.MethodValidationException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+import org.springframework.web.method.annotation.HandlerMethodValidationException;
 
 import java.time.LocalDateTime;
 import java.util.stream.Collectors;
@@ -21,7 +24,7 @@ public class GlobalExceptionHandler {
 
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
-    public ResponseEntity<ErrorResponse> ValidationException(MethodArgumentNotValidException ex, HttpServletRequest request) {
+    public ResponseEntity<ErrorResponse> validationException(MethodArgumentNotValidException ex, HttpServletRequest request) {
         String errorMessages = ex.getBindingResult().getFieldErrors()
                 .stream()
                 .map(error -> error.getField() + ": " + error.getDefaultMessage())
@@ -40,7 +43,7 @@ public class GlobalExceptionHandler {
 
     }
     @ExceptionHandler(UserNotFoundException.class)
-    public ResponseEntity<ErrorResponse> UserNotFoundException(UserNotFoundException ex ,HttpServletRequest request){
+    public ResponseEntity<ErrorResponse> userNotFoundException(UserNotFoundException ex ,HttpServletRequest request){
         ErrorResponse errorResponse = ErrorResponse.builder()
                 .timestamp(LocalDateTime.now())
                 .status(HttpStatus.NOT_FOUND.value())
@@ -51,7 +54,7 @@ public class GlobalExceptionHandler {
         return new ResponseEntity<>(errorResponse,HttpStatus.NOT_FOUND);
     }
     @ExceptionHandler(InvalidCredentialException.class)
-    public ResponseEntity<ErrorResponse> InvalidCredentialException(InvalidCredentialException ex , HttpServletRequest request){
+    public ResponseEntity<ErrorResponse> invalidCredentialException(InvalidCredentialException ex , HttpServletRequest request){
         ErrorResponse errorResponse = ErrorResponse.builder()
                 .timestamp(LocalDateTime.now())
                 .status(HttpStatus.UNAUTHORIZED.value())
@@ -62,7 +65,7 @@ public class GlobalExceptionHandler {
         return new ResponseEntity<>(errorResponse,HttpStatus.UNAUTHORIZED);
     }
     @ExceptionHandler(DuplicateEntryException.class)
-    public ResponseEntity<ErrorResponse> DuplicateEntryException(DuplicateEntryException ex , HttpServletRequest request){
+    public ResponseEntity<ErrorResponse> duplicateEntryException(DuplicateEntryException ex , HttpServletRequest request){
         ErrorResponse errorResponse = ErrorResponse.builder()
                 .timestamp(LocalDateTime.now())
                 .status(HttpStatus.CONFLICT.value())
@@ -73,7 +76,7 @@ public class GlobalExceptionHandler {
         return new ResponseEntity<>(errorResponse,HttpStatus.CONFLICT);
     }
     @ExceptionHandler(DataIntegrityViolationException.class)
-    public ResponseEntity<ErrorResponse> DataIntegrityViolation(DataIntegrityViolationException ex , HttpServletRequest request){
+    public ResponseEntity<ErrorResponse> dataIntegrityViolation(DataIntegrityViolationException ex , HttpServletRequest request){
         ErrorResponse errorResponse = ErrorResponse.builder()
                 .timestamp(LocalDateTime.now())
                 .status(HttpStatus.CONFLICT.value())
@@ -82,5 +85,17 @@ public class GlobalExceptionHandler {
                 .path(request.getRequestURI())
                 .build();
         return new ResponseEntity<>(errorResponse,HttpStatus.CONFLICT);
+    }
+
+    @ExceptionHandler(HandlerMethodValidationException.class)
+    public ResponseEntity<ErrorResponse> handlerMethodValidationException (HandlerMethodValidationException  ex , HttpServletRequest request){
+        ErrorResponse errorResponse = ErrorResponse.builder()
+                .timestamp(LocalDateTime.now())
+                .status(HttpStatus.BAD_REQUEST.value())
+                .error(ex.getMessage().toLowerCase())
+                .message("Please enter valid user id")
+                .path(request.getRequestURI())
+                .build();
+        return new ResponseEntity<>(errorResponse,HttpStatus.BAD_REQUEST);
     }
 }
