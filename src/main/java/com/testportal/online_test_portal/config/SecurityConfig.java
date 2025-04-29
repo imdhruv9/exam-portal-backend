@@ -32,6 +32,7 @@ public class SecurityConfig {
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(authz -> authz
                         .requestMatchers("/public/**").permitAll()
+                        .requestMatchers("/auth/register/admin").permitAll()
                         .anyRequest().authenticated()
                 )
                 .httpBasic(withDefaults());

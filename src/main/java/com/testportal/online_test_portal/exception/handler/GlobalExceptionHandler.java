@@ -3,6 +3,7 @@ package com.testportal.online_test_portal.exception.handler;
 
 import com.testportal.online_test_portal.exception.custom.DuplicateEntryException;
 import com.testportal.online_test_portal.exception.custom.InvalidCredentialException;
+import com.testportal.online_test_portal.exception.custom.ResourceNotFoundException;
 import com.testportal.online_test_portal.exception.custom.UserNotFoundException;
 import com.testportal.online_test_portal.exception.model.ErrorResponse;
 import jakarta.servlet.http.HttpServletRequest;
@@ -97,5 +98,16 @@ public class GlobalExceptionHandler {
                 .path(request.getRequestURI())
                 .build();
         return new ResponseEntity<>(errorResponse,HttpStatus.BAD_REQUEST);
+    }
+    @ExceptionHandler(ResourceNotFoundException.class)
+    public ResponseEntity<ErrorResponse> resourceNotFoundException(ResourceNotFoundException ex ,HttpServletRequest request){
+        ErrorResponse errorResponse = ErrorResponse.builder()
+                .timestamp(LocalDateTime.now())
+                .status(HttpStatus.NOT_FOUND.value())
+                .error(ex.getMessage())
+                .message("Please enter valid id or username")
+                .path(request.getRequestURI())
+                .build();
+        return new ResponseEntity<>(errorResponse,HttpStatus.NOT_FOUND);
     }
 }
