@@ -14,7 +14,8 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Builder
 @JsonInclude(JsonInclude.Include.NON_NULL)
-public class UserUpdateDto {
+public class
+UserUpdateDto {
     private String firstName;
 
     private String lastName;

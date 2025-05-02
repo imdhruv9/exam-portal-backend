@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.method.annotation.HandlerMethodValidationException;
 
+import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.stream.Collectors;
 
@@ -32,7 +33,6 @@ public class GlobalExceptionHandler {
                 .collect(Collectors.joining(", "));
 
 
-
         ErrorResponse errorResponse = ErrorResponse.builder()
                 .timestamp(LocalDateTime.now())
                 .status(HttpStatus.BAD_REQUEST.value())
@@ -40,11 +40,12 @@ public class GlobalExceptionHandler {
                 .message("Please enter valid input")
                 .path(request.getRequestURI())
                 .build();
-        return new ResponseEntity<>(errorResponse,HttpStatus.BAD_REQUEST);
+        return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
 
     }
+
     @ExceptionHandler(UserNotFoundException.class)
-    public ResponseEntity<ErrorResponse> userNotFoundException(UserNotFoundException ex ,HttpServletRequest request){
+    public ResponseEntity<ErrorResponse> userNotFoundException(UserNotFoundException ex, HttpServletRequest request) {
         ErrorResponse errorResponse = ErrorResponse.builder()
                 .timestamp(LocalDateTime.now())
                 .status(HttpStatus.NOT_FOUND.value())
@@ -52,10 +53,11 @@ public class GlobalExceptionHandler {
                 .message("Please enter valid user")
                 .path(request.getRequestURI())
                 .build();
-        return new ResponseEntity<>(errorResponse,HttpStatus.NOT_FOUND);
+        return new ResponseEntity<>(errorResponse, HttpStatus.NOT_FOUND);
     }
+
     @ExceptionHandler(InvalidCredentialException.class)
-    public ResponseEntity<ErrorResponse> invalidCredentialException(InvalidCredentialException ex , HttpServletRequest request){
+    public ResponseEntity<ErrorResponse> invalidCredentialException(InvalidCredentialException ex, HttpServletRequest request) {
         ErrorResponse errorResponse = ErrorResponse.builder()
                 .timestamp(LocalDateTime.now())
                 .status(HttpStatus.UNAUTHORIZED.value())
@@ -63,10 +65,11 @@ public class GlobalExceptionHandler {
                 .message("Invalid Password")
                 .path(request.getRequestURI())
                 .build();
-        return new ResponseEntity<>(errorResponse,HttpStatus.UNAUTHORIZED);
+        return new ResponseEntity<>(errorResponse, HttpStatus.UNAUTHORIZED);
     }
+
     @ExceptionHandler(DuplicateEntryException.class)
-    public ResponseEntity<ErrorResponse> duplicateEntryException(DuplicateEntryException ex , HttpServletRequest request){
+    public ResponseEntity<ErrorResponse> duplicateEntryException(DuplicateEntryException ex, HttpServletRequest request) {
         ErrorResponse errorResponse = ErrorResponse.builder()
                 .timestamp(LocalDateTime.now())
                 .status(HttpStatus.CONFLICT.value())
@@ -74,10 +77,11 @@ public class GlobalExceptionHandler {
                 .message("User already exist")
                 .path(request.getRequestURI())
                 .build();
-        return new ResponseEntity<>(errorResponse,HttpStatus.CONFLICT);
+        return new ResponseEntity<>(errorResponse, HttpStatus.CONFLICT);
     }
+
     @ExceptionHandler(DataIntegrityViolationException.class)
-    public ResponseEntity<ErrorResponse> dataIntegrityViolation(DataIntegrityViolationException ex , HttpServletRequest request){
+    public ResponseEntity<ErrorResponse> dataIntegrityViolation(DataIntegrityViolationException ex, HttpServletRequest request) {
         ErrorResponse errorResponse = ErrorResponse.builder()
                 .timestamp(LocalDateTime.now())
                 .status(HttpStatus.CONFLICT.value())
@@ -85,11 +89,11 @@ public class GlobalExceptionHandler {
                 .message("Resource already exist")
                 .path(request.getRequestURI())
                 .build();
-        return new ResponseEntity<>(errorResponse,HttpStatus.CONFLICT);
+        return new ResponseEntity<>(errorResponse, HttpStatus.CONFLICT);
     }
 
     @ExceptionHandler(HandlerMethodValidationException.class)
-    public ResponseEntity<ErrorResponse> handlerMethodValidationException (HandlerMethodValidationException  ex , HttpServletRequest request){
+    public ResponseEntity<ErrorResponse> handlerMethodValidationException(HandlerMethodValidationException ex, HttpServletRequest request) {
         ErrorResponse errorResponse = ErrorResponse.builder()
                 .timestamp(LocalDateTime.now())
                 .status(HttpStatus.BAD_REQUEST.value())
@@ -97,10 +101,11 @@ public class GlobalExceptionHandler {
                 .message("Please enter valid user id")
                 .path(request.getRequestURI())
                 .build();
-        return new ResponseEntity<>(errorResponse,HttpStatus.BAD_REQUEST);
+        return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
     }
+
     @ExceptionHandler(ResourceNotFoundException.class)
-    public ResponseEntity<ErrorResponse> resourceNotFoundException(ResourceNotFoundException ex ,HttpServletRequest request){
+    public ResponseEntity<ErrorResponse> resourceNotFoundException(ResourceNotFoundException ex, HttpServletRequest request) {
         ErrorResponse errorResponse = ErrorResponse.builder()
                 .timestamp(LocalDateTime.now())
                 .status(HttpStatus.NOT_FOUND.value())
@@ -108,6 +113,30 @@ public class GlobalExceptionHandler {
                 .message("Please enter valid id or username")
                 .path(request.getRequestURI())
                 .build();
-        return new ResponseEntity<>(errorResponse,HttpStatus.NOT_FOUND);
+        return new ResponseEntity<>(errorResponse, HttpStatus.NOT_FOUND);
+    }
+
+    @ExceptionHandler(IllegalStateException.class)
+    public ResponseEntity<ErrorResponse> illegalStateException(IllegalStateException ex, HttpServletRequest request) {
+        ErrorResponse errorResponse = ErrorResponse.builder()
+                .timestamp(LocalDateTime.now())
+                .status(HttpStatus.BAD_REQUEST.value())
+                .error(ex.getMessage())
+                .message("Exam already submitted")
+                .path(request.getRequestURI())
+                .build();
+        return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(IOException.class)
+    public ResponseEntity<ErrorResponse> iOException(IOException ex, HttpServletRequest request) {
+        ErrorResponse errorResponse = ErrorResponse.builder()
+                .timestamp(LocalDateTime.now())
+                .status(HttpStatus.INTERNAL_SERVER_ERROR.value())
+                .error(ex.getMessage())
+                .message("File could not be uploaded , please try again later")
+                .path(request.getRequestURI())
+                .build();
+        return new ResponseEntity<>(errorResponse, HttpStatus.INTERNAL_SERVER_ERROR);
     }
 }

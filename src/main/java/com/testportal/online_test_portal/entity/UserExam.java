@@ -7,33 +7,40 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Map;
 
 @Entity
 @Data
-@Builder
-@NoArgsConstructor
 @AllArgsConstructor
-@Table(name="questions",uniqueConstraints = {
-        @UniqueConstraint(columnNames = "Question-text")
-})
-public class Question {
+@NoArgsConstructor
+@Builder
+public class UserExam {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false)
-    private String questionText;  //
+    @ManyToOne
+    private User user;
 
     @ManyToOne
-    @JoinColumn(name = "topic_id",nullable = false)
-    private Topic topic;
+    private Exam exam;
 
-    @OneToMany(mappedBy = "question", cascade = CascadeType.ALL)
-    private List<Option> options;
-    @ManyToOne
-    @JoinColumn(name = "user_id",nullable = false)
-    private User createdBy;
+    @ElementCollection
+    private List<Long> questionIds;
+
+    @ElementCollection
+    private Map<Long, List<String>> shuffledOptions; // questionId -> options
+
+    @ElementCollection
+    private Map<Long, String> userAnswers;
+
+    private LocalDateTime startedAt;
+    private LocalDateTime submittedAt;
+
+    @Column(name="correct_ans")
+    private Integer correctAns;
 
     private LocalDate createdDate;
 
@@ -44,8 +51,5 @@ public class Question {
         this.isActive = true;
 
     }
-
-
-
 }
 
