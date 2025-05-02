@@ -1,16 +1,15 @@
 package com.testportal.online_test_portal.controller;
 
-import com.testportal.online_test_portal.dto.ExamRequestDto;
-import com.testportal.online_test_portal.dto.ExamResponseDto;
+import com.testportal.online_test_portal.dto.*;
 import com.testportal.online_test_portal.service.ExamService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.io.IOException;
+import java.util.List;
 
 @RestController
 @RequestMapping("/exams")
@@ -28,5 +27,26 @@ public class ExamController {
         return  new ResponseEntity<>(responseDto, HttpStatus.CREATED);
 
     }
+    @GetMapping
+    public ResponseEntity<List<ExamResponseDto>> fetchExams(){
+        List<ExamResponseDto> exams = examService.fetchExams();
+        return new ResponseEntity<>(exams,HttpStatus.OK);
+    }
+    @GetMapping("/{userId}/{examId}/start")
+    public ResponseEntity<ExamStartResDto> startExam(@PathVariable Long userId, @PathVariable Long examId){
+        ExamStartResDto response = examService.startExam(userId,examId);
+        return new ResponseEntity<>(response,HttpStatus.OK);
+    }
+    @PostMapping("/{userExamId}/submit")
+    public ResponseEntity<SubmitExamResDto> submitExam(@PathVariable Long userExamId, @RequestBody SubmitExamReqDto submitExamReqDto){
+        SubmitExamResDto resDto = examService.submitExam(userExamId,submitExamReqDto);
+        return new ResponseEntity<>(resDto,HttpStatus.OK);
+    }
+    @GetMapping("/{userExamId}/result")
+    public ResponseEntity<ResultResponseDto> viewResult (@PathVariable Long userExamId)throws IOException{
+            ResultResponseDto result = examService.viewResult(userExamId);
+            return new ResponseEntity<>(result, HttpStatus.OK);
+        }
+    }
 
-}
+

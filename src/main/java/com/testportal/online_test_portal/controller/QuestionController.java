@@ -1,15 +1,16 @@
 package com.testportal.online_test_portal.controller;
 
+import com.testportal.online_test_portal.dto.QuestionListDto;
 import com.testportal.online_test_portal.dto.QuestionRequestDto;
 import com.testportal.online_test_portal.service.QuestionService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.io.IOException;
 
 @RestController
 @RequestMapping("/questions")
@@ -25,4 +26,15 @@ public class QuestionController {
          questionService.addQuestion(questionRequestDto);
         return new ResponseEntity<>("Question uploaded successfully", HttpStatus.CREATED);
     }
+    @PostMapping("/bulk")
+    public ResponseEntity<String> addMultipleQuestion(@RequestBody @Valid QuestionListDto questionListDto){
+        questionService.addMultipleQuestion(questionListDto);
+        return new ResponseEntity<>("All questions successfully uploaded",HttpStatus.CREATED);
+    }
+    @PostMapping("/csv")
+    public ResponseEntity<String> addQuestionFromCsv(@RequestParam("file") MultipartFile file) throws IOException {
+        questionService.addQuestionFromCsv(file);
+        return new ResponseEntity<>("Question uploaded Successfully via file",HttpStatus.OK);
+    }
+
 }

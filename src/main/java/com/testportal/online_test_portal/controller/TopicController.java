@@ -16,12 +16,10 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/topics")
 public class TopicController {
     private final TopicService topicService;
-    private final TopicRepository topicRepository;
 
     @Autowired
-    public TopicController(TopicService topicService, TopicRepository topicRepository) {
+    public TopicController(TopicService topicService) {
         this.topicService = topicService;
-        this.topicRepository = topicRepository;
     }
 
     @PostMapping()
