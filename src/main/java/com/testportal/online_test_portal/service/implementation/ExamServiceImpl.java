@@ -69,6 +69,7 @@ public class ExamServiceImpl implements ExamService {
         }
         return responseDtos;
     }
+    @Transactional
     @Override
     public ExamStartResDto startExam(Long userID, Long examId){
         User user = userRepository.findById(userID)
@@ -104,6 +105,7 @@ public class ExamServiceImpl implements ExamService {
         return new ExamStartResDto(userExam.getId(),exam.getTopic().getName(),questionResDtos);
 
     }
+    @Transactional
     @Override
     public SubmitExamResDto submitExam(Long id, SubmitExamReqDto reqDto){
         UserExam userExam = userExamRepository.findById(id)
@@ -131,6 +133,7 @@ public class ExamServiceImpl implements ExamService {
         return new SubmitExamResDto
                 ("Exam submitted successfully",questions.size(),correct,correct);
     }
+    @Transactional
     @Override
     public ResultResponseDto viewResult(Long userExamId){
         UserExam  userExam = userExamRepository.findById(userExamId)
@@ -155,8 +158,7 @@ public class ExamServiceImpl implements ExamService {
             result.add(resDto);
             status = "Incorrect";
         }
-
-       return ResultResponseDto.builder()
+        return ResultResponseDto.builder()
                .topic(userExam.getExam().getTopic().getName())
                .totalQuestion(userExam.getExam().getNoOfQuestion())
                .totalCorrect(userExam.getCorrectAns())
@@ -164,11 +166,24 @@ public class ExamServiceImpl implements ExamService {
                .body(result)
                .build();
 
+    }
+    @Transactional
+    @Override
+    public List<PastExamsResDto> viewPastExams(Long userId){
+          List<UserExam> userExams = userExamRepository.findByUserId(userId);
+          List<PastExamsResDto> resDtos = new ArrayList<>();
 
+          for(UserExam userExam: userExams ){
+              PastExamsResDto pastExamsResDto = new PastExamsResDto();
+              pastExamsResDto.setUserExamId(userExam.getId());
+              pastExamsResDto.setTopic(userExam.getExam().getTopic().getName());
+              pastExamsResDto.setTotalQues(userExam.getQuestionIds().size());
+              pastExamsResDto.setCorrectAns(userExam.getCorrectAns());
+              pastExamsResDto.setScore(userExam.getCorrectAns());
+              resDtos.add(pastExamsResDto);
+          }
+          return resDtos;
 
 
     }
-
-
-
 }
