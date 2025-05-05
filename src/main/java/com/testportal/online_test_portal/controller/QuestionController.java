@@ -34,7 +34,12 @@ public class QuestionController {
     @PostMapping("/csv")
     public ResponseEntity<String> addQuestionFromCsv(@RequestParam("file") MultipartFile file) throws IOException {
         questionService.addQuestionFromCsv(file);
-        return new ResponseEntity<>("Question uploaded Successfully via file",HttpStatus.OK);
+        return new ResponseEntity<>("Question uploaded Successfully via csv file",HttpStatus.OK);
+    }
+    @PostMapping("/excel")
+    public ResponseEntity<String> addQuestionFromExcel(@RequestParam("file") MultipartFile file) throws  IOException{
+        questionService.addQuestionFromExcel(file);
+        return new ResponseEntity<>("Question uploaded successfully via excel file",HttpStatus.OK);
     }
 
 }

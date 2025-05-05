@@ -44,9 +44,16 @@ public class ExamController {
     }
     @GetMapping("/{userExamId}/result")
     public ResponseEntity<ResultResponseDto> viewResult (@PathVariable Long userExamId)throws IOException{
-            ResultResponseDto result = examService.viewResult(userExamId);
-            return new ResponseEntity<>(result, HttpStatus.OK);
-        }
+        ResultResponseDto result = examService.viewResult(userExamId);
+        return new ResponseEntity<>(result, HttpStatus.OK);
     }
+    @GetMapping("/{userId}/past-exams")
+    public ResponseEntity<List<PastExamsResDto>> viewPastExams(@PathVariable Long userId){
+        List<PastExamsResDto> pastExams = examService.viewPastExams(userId);
+        return new ResponseEntity<>(pastExams,HttpStatus.OK);
+    }
+
+}
+
 
 

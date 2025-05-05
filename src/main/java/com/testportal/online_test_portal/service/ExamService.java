@@ -1,6 +1,7 @@
 package com.testportal.online_test_portal.service;
 
 import com.testportal.online_test_portal.dto.*;
+import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -16,4 +17,7 @@ public interface ExamService {
     SubmitExamResDto submitExam(Long id, SubmitExamReqDto reqDto);
 
     ResultResponseDto viewResult(Long userExamId);
+
+    @Transactional
+    List<PastExamsResDto> viewPastExams(Long userId);
 }
