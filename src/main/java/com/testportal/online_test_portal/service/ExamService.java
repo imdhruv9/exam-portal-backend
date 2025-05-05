@@ -20,4 +20,6 @@ public interface ExamService {
 
     @Transactional
     List<PastExamsResDto> viewPastExams(Long userId);
+
+    ReviewResDto reviewAnswers(Long userExamId, SubmitExamReqDto reqDto);
 }

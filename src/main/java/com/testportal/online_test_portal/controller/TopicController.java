@@ -1,7 +1,6 @@
 package com.testportal.online_test_portal.controller;
 
 import com.testportal.online_test_portal.dto.TopicDto;
-import com.testportal.online_test_portal.repository.TopicRepository;
 import com.testportal.online_test_portal.service.TopicService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;

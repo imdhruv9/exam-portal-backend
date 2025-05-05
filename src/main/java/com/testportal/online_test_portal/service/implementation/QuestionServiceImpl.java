@@ -45,7 +45,7 @@ public class QuestionServiceImpl implements QuestionService {
         this.topicRepository = topicRepository;
         this.optionRepository = optionRepository;
     }
-
+    @Transactional
     @Override
     public void addQuestion(QuestionRequestDto questionRequestDto) {
         Optional<User> optionalUser =  userRepository.findById(questionRequestDto.getUserId());
@@ -70,6 +70,7 @@ public class QuestionServiceImpl implements QuestionService {
             optionRepository.save(option1);
         }
     }
+    @Transactional
     @Override
     public void addMultipleQuestion(QuestionListDto questionListDto){
         for(QuestionRequestDto requestDto : questionListDto.getQuestions()){
@@ -95,6 +96,7 @@ public class QuestionServiceImpl implements QuestionService {
             }
         }
     }
+    @Transactional
     @Override
     public void addQuestionFromCsv(MultipartFile file) throws IOException {
         try(BufferedReader br = new BufferedReader(new InputStreamReader(file.getInputStream()))) {
