@@ -10,6 +10,7 @@ import com.testportal.online_test_portal.mapper.UserMapper;
 import com.testportal.online_test_portal.repository.UserRepository;
 import com.testportal.online_test_portal.service.UserService;
 import jakarta.transaction.Transactional;
+import org.springframework.dao.DataAccessException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -99,7 +100,6 @@ public class UserServiceImpl implements UserService {
                 .build();
     }
 
-    @Transactional
     @Override
     public UserProfileDto updateUserProfile(UserUpdateDto dto){
         Optional<User> optionalUser = userRepository.findById(dto.getId());

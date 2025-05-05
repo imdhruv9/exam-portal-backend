@@ -8,7 +8,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.io.IOException;
 import java.util.List;
 
 @RestController
@@ -43,7 +42,7 @@ public class ExamController {
         return new ResponseEntity<>(resDto,HttpStatus.OK);
     }
     @GetMapping("/{userExamId}/result")
-    public ResponseEntity<ResultResponseDto> viewResult (@PathVariable Long userExamId)throws IOException{
+    public ResponseEntity<ResultResponseDto> viewResult (@PathVariable Long userExamId){
         ResultResponseDto result = examService.viewResult(userExamId);
         return new ResponseEntity<>(result, HttpStatus.OK);
     }
@@ -51,6 +50,11 @@ public class ExamController {
     public ResponseEntity<List<PastExamsResDto>> viewPastExams(@PathVariable Long userId){
         List<PastExamsResDto> pastExams = examService.viewPastExams(userId);
         return new ResponseEntity<>(pastExams,HttpStatus.OK);
+    }
+    @PostMapping("/{userExamId}/review")
+    public ResponseEntity<ReviewResDto> reviewAnswers(@PathVariable Long userExamId, @RequestBody SubmitExamReqDto submitExamReqDto){
+        ReviewResDto resDto = examService.reviewAnswers(userExamId,submitExamReqDto);
+        return new ResponseEntity<>(resDto,HttpStatus.OK);
     }
 
 }

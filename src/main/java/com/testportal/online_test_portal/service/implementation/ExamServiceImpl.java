@@ -30,7 +30,6 @@ public class ExamServiceImpl implements ExamService {
         this.userExamRepository = userExamRepository;
         this.questionRepository = questionRepository;
     }
-    @Transactional
     @Override
     public ExamResponseDto createExam(ExamRequestDto requestDto){
         User user = userRepository.findById(requestDto.getUserId())
@@ -183,7 +182,27 @@ public class ExamServiceImpl implements ExamService {
               resDtos.add(pastExamsResDto);
           }
           return resDtos;
-
-
+    }
+    @Transactional
+    @Override
+    public ReviewResDto reviewAnswers(Long userExamId, SubmitExamReqDto reqDto){
+        Integer size = reqDto.getAnswers().size();
+        UserExam userExam = userExamRepository.findById(userExamId)
+                .orElseThrow(()->new ResourceNotFoundException("Please Enter Valid user Exam id"));
+        List<Question> questions = questionRepository.findAllById(userExam.getQuestionIds());
+        List<ReviewAnsDto> reviewAnsDtos = new ArrayList<>();
+        for(Question question: questions){
+            ReviewAnsDto reviewAnsDto = new ReviewAnsDto();
+            reviewAnsDto.setQuestion(question.getQuestionText());
+            reviewAnsDto.setSubmittedAns(reqDto.getAnswers().get(question.getId()));
+            reviewAnsDtos.add(reviewAnsDto);
+        }
+        return ReviewResDto.builder()
+                .examId(userExam.getExam().getId())
+                .topic(userExam.getExam().getTopic().getName())
+                .totalQuestions(userExam.getExam().getNoOfQuestion())
+                .attemptedQuestions(size)
+                .reviewAnsList(reviewAnsDtos)
+                .build();
     }
 }
